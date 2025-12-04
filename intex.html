@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termux Ethical Hacking Guide</title>
+    <style>
+        :root {
+            --primary: #00ff88;
+            --dark-bg: #0d1117;
+            --card-bg: #161b22;
+            --text: #c9d1d9;
+            --warning: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        .warning-box {
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 2px solid var(--warning);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .terminal {
+            background-color: #000;
+            color: var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #00cc6a;
+            transform: translateY(-2px);
+        }
+        
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tool-card {
+            background-color: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        
+        .tag {
+            display: inline-block;
+            background-color: rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #333;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><i class="fas fa-mobile-alt"></i> Termux Ethical Hacking Guide</h1>
+            <p>Learn to use security tools on Android responsibly</p>
+            <div class="tags">
+                <span class="tag">Android</span>
+                <span class="tag">Termux</span>
+                <span class="tag">Penetration Testing</span>
+                <span class="tag">Legal</span>
+            </div>
+        </header>
+        
+        <!-- WARNING -->
+        <div class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> LEGAL WARNING</h3>
+            <p><strong>Using these tools without authorization is ILLEGAL and punishable by law.</strong> Only test systems you own or have explicit written permission to test. This guide is for educational purposes only.</p>
+        </div>
+        
+        <!-- Installation Section -->
+        <section class="card">
+            <h2><i class="fas fa-download"></i> Installing & Setting Up Termux</h2>
+            
+            <div class="terminal">
+                # Update and upgrade packages<br>
+                $ pkg update && pkg upgrade<br><br>
+                
+                # Install essential tools<br>
+                $ pkg install python python2 git curl wget nano<br><br>
+                
+                # Install storage access<br>
+                $ termux-setup-storage<br><br>
+                
+                # Install root-like tools (proot)<br>
+                $ pkg install proot proot-distro<br>
+                $ proot-distro install ubuntu
+            </div>
+            
+            <h3>Recommended Repositories:</h3>
+            <div class="terminal">
+                # Add extra repositories<br>
+                $ pkg install root-repo x11-repo<br><br>
+                
+                # Install metasploit (if available)<br>
+                $ pkg install unstable-repo<br>
+                $ pkg install metasploit
+            </div>
+        </section>
+        
+        <!-- Essential Tools Section -->
+        <section class="card">
+            <h2><i class="fas fa-tools"></i> Essential Termux Hacking Tools</h2>
+            <p>These tools work well on Termux and are regularly updated:</p>
+            
+            <div class="tool-grid">
+                <!-- Nmap -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-network-wired"></i> Nmap</h3>
+                    <p><strong>Network discovery & security auditing</strong></p>
+                    <div class="terminal">
+                        $ pkg install nmap<br>
+                        $ nmap -sV 192.168.1.1<br>
+                        $ nmap -p 22,80,443 target.com
+                    </div>
+                    <p><strong>Termux Note:</strong> Requires root for some scan types</p>
+                </div>
+                
+                <!-- Hydra -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-key"></i> Hydra</h3>
+                    <p><strong>Password cracking tool</strong></p>
+                    <div class="terminal">
+                        $ pkg install hydra<br>
+                        $ hydra -l admin -P pass.txt ssh://192.168.1.1<br>
+                        $ hydra http-get-form "/login.php:user=^USER^&pass=^PASS^:F=incorrect"
+                    </div>
+                </div>
+                
+                <!-- SQLmap -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-database"></i> SQLmap</h3>
+                    <p><strong>SQL injection automation</strong></p>
+                    <div class="terminal">
+                        $ pkg install sqlmap<br>
+                        $ sqlmap -u "http://test.com?id=1" --dbs<br>
+                        $ sqlmap -u "http://test.com?id=1" --dump -D database
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-grid">
+                <!-- Metasploit -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-bug"></i> Metasploit</h3>
+                    <p><strong>Penetration testing framework</strong></p>
+                    <div class="terminal">
+                        # Installation:<br>
+                        $ pkg install unstable-repo<br>
+                        $ pkg install metasploit<br><br>
+                        
+                        # Usage:<br>
+                        $ msfconsole<br>
+                        msf6 > search eternalblue<br>
+                        msf6 > use exploit/windows/smb/ms17_010_eternalblue
+                    </div>
+                    <p><strong>Note:</strong> Large package (500MB+)</p>
+                </div>
+                
+                <!-- Wireshark (Termux version) -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-traffic-light"></i> Termux-shark</h3>
+                    <p><strong>Packet capture (Wireshark alternative)</strong></p>
+                    <div class="terminal">
+                        $ pkg install tshark<br>
+                        $ tshark -i wlan0<br>
+                        $ tshark -r capture.pcap -Y "http"
+                    </div>
+                </div>
+                
+                <!-- John the Ripper -->
+                <div class="tool-card">
+                    <h3><i class="fas fa-unlock-alt"></i> John the Ripper</h3>
+                    <p><strong>Password hash cracking</strong></p>
+                    <div class="terminal">
+                        $ pkg install john<br>
+                        $ john --format=raw-md5 hash.txt<br>
+                        $ john --wordlist=rockyou.txt hash.txt
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Practical Examples -->
+        <section class="card">
+            <h2><i class="fas fa-code"></i> Practical Termux Scripts</h2>
+            
+            <h3>1. Basic Network Scanner Script</h3>
+            <div class="terminal">
+                #!/bin/bash<br>
+                # Save as scan.sh<br>
+                echo "Termux Network Scanner"<br>
+                echo "======================"<br>
+                read -p "Enter target IP: " target<br>
+                echo "Scanning $target..."<br>
+                nmap -sV -O $target<br>
+                echo "Scan complete!"
+            </div>
+            
+            <h3>2. WiFi Information (No Root)</h3>
+            <div class="terminal">
+                $ termux-wifi-connectioninfo<br>
+                $ termux-wifi-scaninfo<br><br>
+                
+                # Get IP information<br>
+                $ ifconfig wlan0<br>
+                $ ip addr show
+            </div>
+            
+            <h3>3. Create a Simple Keylogger (Educational)</h3>
+            <div class="terminal">
+                #!/data/data/com.termux/files/usr/bin/python3<br>
+                import os<br>
+                import time<br>
+                <br>
+                log_file = "/sdcard/keylog.txt"<br>
+                <br>
+                while True:<br>
+                    &nbsp;&nbsp;key = input("")  # Simulating key capture<br>
+                    &nbsp;&nbsp;with open(log_file, "a") as f:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;f.write(f"[{time.ctime()}] {key}\n")<br>
+                    &nbsp;&nbsp;print(f"Logged: {key}")
+            </div>
+            <p class="warning"><strong>Warning:</strong> Only use on YOUR OWN devices for security testing.</p>
+        </section>
+        
+        <!-- Termux-Specific Features -->
+        <section class="card">
+            <h2><i class="fas fa-mobile"></i> Termux-Only Capabilities</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h3><i class="fas fa-sms"></i> SMS Operations</h3>
+                    <div class="terminal">
+                        # Send SMS<br>
+                        $ termux-sms-send -n +1234567890 "Test message"<br><br>
+                        
+                        # List SMS<br>
+                        $ termux-sms-list -l 10
+                    </div>
+                    <p>Requires SMS permission</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h3><i class="fas fa-phone"></i> Call & Contact</h3>
+                    <div class="terminal">
+                        # Make a call<br>
+                        $ termux-telephony-call +1234567890<br><br>
+                        
+                        # Get contact list<br>
+                        $ termux-contact-list
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <h3><i class="fas fa-camera"></i> Camera & Sensors</h3>
+                    <div class="terminal">
+                        # Take photo<br>
+                        $ termux-camera-photo /sdcard/photo.jpg<br><br>
+                        
+                        # Get sensor data<br>
+                        $ termux-sensor -l<br>
+                        $ termux-sensor -s accelerometer -n 5
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Security & Privacy -->
+        <section class="card">
+            <h2><i class="fas fa-user-shield"></i> Termux Security Guidelines</h2>
+            
+            <div class="warning-box">
+                <h4><i class="fas fa-shield-alt"></i> IMPORTANT SECURITY MEASURES</h4>
+                <ul>
+                    <li><strong>Use a VPN:</strong> Always connect through a VPN when testing</li>
+                    <li><strong>Isolated Testing:</strong> Only test your own devices/lab</li>
+                    <li><strong>Regular Updates:</strong> Keep Termux and tools updated</li>
+                    <li><strong>Permission Control:</strong> Grant minimal necessary permissions</li>
+                    <li><strong>Log Cleaning:</strong> Clear logs after legitimate testing</li>
+                </ul>
+            </div>
+            
+            <h3>Secure Your Termux Installation:</h3>
+            <div class="terminal">
+                # Change default $PREFIX permissions<br>
+                $ chmod 700 $PREFIX<br><br>
+                
+                # Install and use a firewall<br>
+                $ pkg install termux-tools<br>
+                $ termux-firewall --enable<br><br>
+                
+                # Encrypt sensitive files<br>
+                $ pkg install gnupg<br>
+                $ gpg -c secret_file.txt
+            </div>
+        </section>
+        
+        <!-- Learning Resources -->
+        <section class="card">
+            <h2><i class="fas fa-graduation-cap"></i> Learning Path & Resources</h2>
+            
+            <h3>Step-by-Step Learning:</h3>
+            <ol>
+                <li><strong>Week 1:</strong> Master basic Linux commands in Termux</li>
+                <li><strong>Week 2:</strong> Learn networking concepts and Nmap</li>
+                <li><strong>Week 3:</strong> Practice with SQLmap on legal test sites</li>
+                <li><strong>Week 4:</strong> Learn Python scripting for automation</li>
+                <li><strong>Week 5:</strong> Practice on legal platforms (TryHackMe mobile)</li>
+            </ol>
+            
+            <h3>Legal Practice Platforms:</h3>
+            <div class="terminal">
+                # These work on Termux:<br>
+                • TryHackMe (via browser)<br>
+                • HackTheBox (some challenges)<br>
+                • OverTheWire Bandit<br>
+                • PicoCTF<br>
+                • VulnHub (download VMs)
+            </div>
+            
+            <a href="#" class="btn"><i class="fas fa-book"></i> Termux Documentation</a>
+            <a href="#" class="btn"><i class="fas fa-video"></i> Video Tutorials</a>
+            <a href="#" class="btn"><i class="fas fa-code"></i> Example Scripts</a>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <h3>Responsible Hacking on Termux</h3>
+            <p>Remember: With great power comes great responsibility. Use Termux tools ethically and legally.</p>
+            <p><strong>© 2023 Termux Ethical Hacking Guide | Educational Purpose Only</strong></p>
+            <div style="margin-top: 20px;">
+                <span class="tag">#WhiteHat</span>
+                <span class="tag">#CyberSecurity</span>
+                <span class="tag">#TermuxTools</span>
+                <span class="tag">#EthicalHacking</span>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Copy code functionality
+        document.querySelectorAll('.terminal').forEach(block => {
+            block.addEventListener('click', function() {
+                const text = this.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> Copied to clipboard!';
+                    setTimeout(() => {
+                        this.innerHTML = original;
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Mobile warning
+        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            console.log("Mobile device detected - Termux guide is appropriate");
+        } else {
+            console.log("Desktop user viewing Termux guide");
+        }
+        
+        // Last updated
+        document.addEventListener('DOMContentLoaded', function() {
+            const date = new Date().toLocaleDateString();
+            const footer = document.querySelector('footer');
+            footer.innerHTML += `<p><small>Page generated: ${date}</small></p>`;
+        });
+    </script>
+</body>
+</html>
